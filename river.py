@@ -23,8 +23,8 @@ class Boat:
         """
         :param river_size: The size of the river
         :param dye_weight: the weight of dye powder the boat is carrying in pounds
-        :param velocity: the velocity of the boat
-        :param dye_spread_v: the weight of dye can be spread per second
+        :param velocity: the velocity of the boat in m/s
+        :param dye_spread_v: the weight of dye can be spread in g/s
         :param visible_concentration: define the concentration for people to see "green" color
         """
         self.river_size = river_size
@@ -36,9 +36,13 @@ class Boat:
         self.dye_weight = dye_weight * 453.59237
         self.velocity = velocity
         self.dye_spread_v = dye_spread_v
+        # vertical direction parameters for boat movement
         self.vdir = 0.5
+        # horizontal direction parameters for boat movement
         self.hdir = 1
+        # vertical movement indicator for straight sailing
         self.vmove = -1
+        #
         self.h_time = 20
         self.dye = Dye(visible_concentration)
         self.visible_concentration = visible_concentration
@@ -56,7 +60,6 @@ class Boat:
                 return self.dye.to_concerntration(self.dye_spread_v)
             else:
                 # print(self.dye_weight)
-                # turn to zero?
                 last = self.dye_weight / boat_width
                 self.dye_weight = 0
                 return self.dye.to_concerntration(last)
@@ -241,22 +244,20 @@ class Boat:
 class Dye:
     def __init__(self, visible_concentration):
         """
-
-        :param concentration_ratio: n
         :param visible_concentration:
-        Percent weight-volume (%(w/v)) = 100 x (g of solute / ml of solution)
         dye information:
         https://www.irishcentral.com/culture/craic/st-patricks-day-chicago-river-green
         """
         self.visible_concentration = visible_concentration
 
-    def to_concerntration(self,dye_weight):
+    def to_concerntration(self,dye_g):
         """
-        turn unit of dye into the concentratio
-        :param dye_weight:
-        :return:
+        turn weight of dye into the concentration
+        Percent weight-volume (%(w/v)) = 100 x (g of solute / ml of solution)
+        :param dye_g: the weight of dye in gram.
+        :return: the concentration in g / m^3
         """
-        return dye_weight / 100 ** 3 * 1000
+        return dye_g / 100 ** 3 * 1000
 
 
 class River:
