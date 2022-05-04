@@ -1,6 +1,4 @@
 import numpy as np
-import scipy
-import time
 from matplotlib import pyplot as plt
 import random
 from humanfriendly import format_timespan
@@ -9,6 +7,8 @@ from humanfriendly import format_timespan
 # Possible features can be added: the diffusion speed affected by the boat (unit distance around)
 # Possible features can be added: the route of the boat, can be straight or s-shaped
 # The sailing speed is around 1 m/s
+
+
 class Boat:
     def __init__(self, river_size, dye_weight, velocity, dye_spread_v, visible_concentration):
         """
@@ -29,6 +29,8 @@ class Boat:
         self.dye_spread_v = dye_spread_v
         self.vdir = 0.5
         self.hdir = 1
+        self.vmove = -1
+        self.h_time = 20
         self.dye = Dye(visible_concentration)
         self.visible_concentration = visible_concentration
         self.weight_list = [1, 1, 1, 1, 99, 1, 1, 1, 1]
@@ -58,10 +60,28 @@ class Boat:
         """
         if self.loc[0] < 2:
             self.vdir = 1
+            if self.loc[1] < 2:
+                self.hdir = 1
+            elif self.loc[1] > self.river_size[1] - 2:
+                self.hdir = -1
+            if self.vmove and self.h_time == 20:
+                self.vmove = self.vmove * -1
         if self.loc[0] > self.river_size[0] - 2:
             self.vdir = -1
-        self.loc[0] += self.vdir * self.velocity
-        return [min(round(self.loc[0]), self.river_size[0] - 3), self.loc[1]]
+            if self.loc[1] < 2:
+                self.hdir = 1
+            elif self.loc[1] > self.river_size[1] - 2:
+                self.hdir = -1
+            if self.vmove and self.h_time == 20:
+                self.vmove = self.vmove * -1
+        if self.vmove == -1:
+            self.loc[1] += self.hdir * self.velocity
+            self.h_time -= 1
+        else:
+            self.loc[0] += self.vdir * self.velocity
+        if self.h_time == 0:
+            self.h_time = 20
+        return [min(round(self.loc[0]), self.river_size[0] - 3), min(round(self.loc[1]), self.river_size[1] -3)]
 
     def zip_sailing(self, right=True, down=True):
         """
@@ -290,25 +310,6 @@ class River:
         # self.r = scipy.ndimage.interpolation.shift(self.r, [self.flow_rate, 0], cval=0.0)
 
 
-def simulate1():
-    # user input can be input
-    s_river = River(550, 70, 1, 1)
-    s_boat= Boat([550, 70], 45, 1, 7.5, 0.003)
-    for i in range(100):
-        # Boat spreads dye in each timestamp, the concentration in corresponding location will be updated (width of 5)
-        loc = s_boat.straight_sailing()
-        s_river.r[loc[0], loc[1] - 2:loc[1] + 2] += s_boat.spread_dye()
-        # the dye will dissolve in each timestamp
-        s_river.dissolve()
-        # the boat sails
-        if i % 10 == 0:
-            #image = ((s_river.r_plot - s_river.r_plot.min()) * (1 / (s_river.r_plot.max() - s_river.r_plot.min()) * 255)).astype('uint8')
-            np.clip(s_river.r_plot, 0, 0.00001)
-            plt.imshow()
-            plt.show()
-            # print(s_river.r[500:550, 30:50])
-
-
 def simulate():
     total_time = 0
     fail_count = 0
@@ -322,19 +323,18 @@ def simulate():
         go = True
         i = 0
         time_95 = 0
-        right, down, loc = b_boat.zip_sailing()
+        # right, down, loc = b_boat.zip_sailing()
         plt.ion()
         loc2 = None
         while go:
-        # for i in range(3000):
-        #     loc = s_boat.straight_sailing()
             if s_boat.dye_weight != 0:
                 s_boat.get_random_weight(s_river.r_plot)
                 # loc = b_boat.zigzag_sailing()
+                loc = b_boat.straight_sailing()
                 loc2 = s_boat.random_sailing()
                 s_river.r[loc[0], loc[1]-1:loc[1]+2] += b_boat.spread_dye(3)
                 s_river.r[loc2[0], loc2[1]] += s_boat.spread_dye()
-                right, down, loc = b_boat.zip_sailing(right, down)
+                # right, down, loc = b_boat.zip_sailing(right, down)
                 # print(i, s_boat.dye_weight, b_boat.dye_weight)
             s_river.dissolve()
             s_river.flow_effect()
