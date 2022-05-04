@@ -1,2 +1,1 @@
-# 2022Spring_Finals
-Final projects
+Title: Chicago River Dyeing Monte Carlo Simulation 
