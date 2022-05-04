@@ -7,6 +7,15 @@ from humanfriendly import format_timespan
 # Possible features can be added: the diffusion speed affected by the boat (unit distance around)
 # Possible features can be added: the route of the boat, can be straight or s-shaped
 # The sailing speed is around 1 m/s
+"""
+There are three classes and one simulation function to practice this simulation.
+"Boat" class is designed for the behaviors of a boat, including spreading dye, different moving styles, 
+and the weight of random movement.
+"Dye" class is used to hold the concentration information and do the unit conversion.
+"River" Class can calculate the diffusion and water flow effect on the dye concentration. Each execution will update
+the river concentration for 1 second.
+The simulation function setup the environment to run the Monte Carlo simulation. 
+"""
 
 
 class Boat:
@@ -267,29 +276,29 @@ class River:
         self.flow_rate = flow_rate
         self.r_plot = self.r[1:-1, 1:-1]
 
-    def dissolve(self):
+    def diffusion(self):
         """
 
         :return:
         """
         # set normal distribution random variable with mean=3, sd=1 and rescale the mean to 1
         # water diffusion coefficient reference: https://dtrx.de/od/diff/index.html#tab7 used 8 degree celsius
-        dissolve_rand_x = abs(np.random.normal(loc=3,scale=1,size=(self.r.shape[0], self.r.shape[1])) / 3 * (9.7 * 10**(-3)))
-        dissolve_rand_y = abs(np.random.normal(loc=3,scale=1,size=(self.r.shape[0], self.r.shape[1])) / 3 * (9.7 * 10**(-3)))
+        diffusion_rand_x = abs(np.random.normal(loc=3,scale=1,size=(self.r.shape[0], self.r.shape[1])) / 3 * (9.7 * 10**(-3)))
+        diffusion_rand_y = abs(np.random.normal(loc=3,scale=1,size=(self.r.shape[0], self.r.shape[1])) / 3 * (9.7 * 10**(-3)))
         # Cx,t+1 = d * Cx+1,t + ( 1 - 2d ) * Cx,t + Cx-1, t
         # process edge first, four point didn't processed
-        dissolve_x = np.multiply(self.r, dissolve_rand_x)
-        dissolve_y = np.multiply(self.r, dissolve_rand_y)
-        x_and_1 = dissolve_x[1:,:]
-        x_and_1 = np.vstack((x_and_1, dissolve_x[-1,:]))
-        x_minus_1 = dissolve_x[0:-1,:]
-        x_minus_1 = np.vstack((dissolve_x[0, :], x_minus_1))
-        y_left = dissolve_y[:,1:]
-        y_left = np.hstack((y_left, dissolve_y[:,-1].reshape(-1,1)))
-        y_right = dissolve_y[:,:-1]
-        y_right = np.hstack((dissolve_y[:,0].reshape(-1,1), y_right))
+        diffusion_x = np.multiply(self.r, diffusion_rand_x)
+        diffusion_y = np.multiply(self.r, diffusion_rand_y)
+        x_and_1 = diffusion_x[1:,:]
+        x_and_1 = np.vstack((x_and_1, diffusion_x[-1,:]))
+        x_minus_1 = diffusion_x[0:-1,:]
+        x_minus_1 = np.vstack((diffusion_x[0, :], x_minus_1))
+        y_left = diffusion_y[:,1:]
+        y_left = np.hstack((y_left, diffusion_y[:,-1].reshape(-1,1)))
+        y_right = diffusion_y[:,:-1]
+        y_right = np.hstack((diffusion_y[:,0].reshape(-1,1), y_right))
         self.reserve = self.r
-        self.r = (x_and_1 + x_minus_1) + (y_left + y_right) + (self.r - 2 * dissolve_x - 2 *dissolve_y)
+        self.r = (x_and_1 + x_minus_1) + (y_left + y_right) + (self.r - 2 * diffusion_x - 2 *diffusion_y)
         self.r_plot = self.r[1:-1, 1:-1]
 
     def flow_effect(self):
@@ -314,7 +323,7 @@ def simulate():
     total_time = 0
     fail_count = 0
     total_percentage = 0
-    for s in range(100):
+    for s in range(10):
         # usual length 550 2022 60th 1280
         s_river = River(545, 70, 1, 1)
         # print(s_river.r, s_river.r.shape)
@@ -323,18 +332,18 @@ def simulate():
         go = True
         i = 0
         time_95 = 0
-        # right, down, loc = b_boat.zip_sailing()
+        right, down, loc = b_boat.zip_sailing()
         plt.ion()
         loc2 = None
         while go:
             if s_boat.dye_weight != 0:
                 s_boat.get_random_weight(s_river.r_plot)
                 # loc = b_boat.zigzag_sailing()
-                loc = b_boat.straight_sailing()
+                # loc = b_boat.straight_sailing()
                 loc2 = s_boat.random_sailing()
                 s_river.r[loc[0], loc[1]-1:loc[1]+2] += b_boat.spread_dye(3)
                 s_river.r[loc2[0], loc2[1]] += s_boat.spread_dye()
-                # right, down, loc = b_boat.zip_sailing(right, down)
+                right, down, loc = b_boat.zip_sailing(right, down)
                 # print(i, s_boat.dye_weight, b_boat.dye_weight)
             s_river.dissolve()
             s_river.flow_effect()
@@ -360,7 +369,7 @@ def simulate():
                 print(f'Fail the {s+1}th simulation.')
                 go = False
             # if (s_river.r_plot >= 0.8*2.426*10**-4).all() or i > 7200:
-    avg_time = round(total_time / (100 - fail_count), 0)
+    avg_time = round(total_time / (10 - fail_count), 0)
     print('The average time to dye the river is:', format_timespan(avg_time))
     if fail_count != 0:
         avg_percentage = 1 - round(total_percentage / fail_count, 2)
