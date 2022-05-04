@@ -2,7 +2,7 @@
 ![Chicago River Dye](https://user-images.githubusercontent.com/63265733/166620957-35c910e8-a8bf-43b8-b17b-e130286ce070.jpeg)
 ## Team Member
 Jiren Mao, ShengWen Wang, Zicheng Li
-## Background:
+## Background
 In this project, our group simulates how long it takes for the Chicago River to dye green on St Patrick’s Day. St Patrick’s day is designed to memorialize Saint Patrick and celebrate the culture of the Irish. Chicago started to celebrate St Patrick’s Day by dyeing the river because of city workers’ misoperation. Since that dyeing, the Chicago River has become a traditional activity on St Patrick's Day. Therefore, we want to know whether **boat speed, dyeing spreading strategy, and boat movement** would influence the time of dyeing. 
 ## Hypothesis
 * Boat spreed has associaltion with the time of dyeing 
