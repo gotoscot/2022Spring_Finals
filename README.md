@@ -1,4 +1,4 @@
-# Title Chicago River Dyeing Monte Carlo Simulation
+# Chicago River Dyeing Monte Carlo Simulation
 ![Chicago River Dye](https://user-images.githubusercontent.com/63265733/166620957-35c910e8-a8bf-43b8-b17b-e130286ce070.jpeg)
 ## Team Member
 Jiren Mao, ShengWen Wang, Zicheng Li
