@@ -42,7 +42,7 @@ class Boat:
         self.hdir = 1
         # vertical movement indicator for straight sailing
         self.vmove = -1
-        #
+        # horizontal movement time when a straight sailing boat meet the end of the river
         self.h_time = 20
         self.dye = Dye(visible_concentration)
         self.visible_concentration = visible_concentration
