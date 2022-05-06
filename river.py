@@ -19,13 +19,13 @@ The simulation function setup the environment to run the Monte Carlo simulation.
 
 
 class Boat:
-    def __init__(self, river_size, dye_weight, velocity, dye_spread_v, visible_concentration):
+    def __init__(self, river_size, dye_weight, velocity, dye_spread_v, min_dye):
         """
         :param river_size: The size of the river
         :param dye_weight: the weight of dye powder the boat is carrying in pounds
         :param velocity: the velocity of the boat in m/s
         :param dye_spread_v: the weight of dye can be spread in g/s
-        :param visible_concentration: define the concentration for people to see "green" color
+        :param min_dye: minimum dye need to dye the whole river in pounds
         """
         self.river_size = river_size
         # initial boat location is on the top middle of the given river
@@ -42,16 +42,16 @@ class Boat:
         self.hdir = 1
         # vertical movement indicator for straight sailing
         self.vmove = -1
-        # horizontal movement time when a straight sailing boat meet the end of the river
-        self.h_time = 20
-        self.dye = Dye(visible_concentration)
-        self.visible_concentration = visible_concentration
+        # connect class Dye to the boat for concentration calculation
+        self.dye = Dye(min_dye)
+        # weight list for random movement: equal in all direction if didn't run get_random_weight
         self.weight_list = [1, 1, 1, 1, 99, 1, 1, 1, 1]
 
     def spread_dye(self, boat_width=1):
         """
+        Update the concentration added to the boat location and the remain dye weight
         :param boat_width: the weight of the boat width that can affect the dyeing range
-        :return: return the
+        :return: return the concentration of the point that the boat spread dye
         """
         if self.dye_weight > 0:
             if self.dye_weight > self.dye_spread_v * boat_width:
@@ -65,9 +65,11 @@ class Boat:
                 return self.dye.to_concerntration(last)
         return 0
 
-    def straight_sailing(self):
+    def straight_sailing(self, h_time=20):
         """
-
+        The boat sail straight down the river and turn right and sails for 20 second than turn upstream in straight line.
+        In case the boat meet the right bank, it will turn to the left bank.
+        :param h_time: horizontal movement time when a straight sailing boat meet the end of the river
         :return: the location in next timestamp
         """
         if self.loc[0] < 2:
@@ -76,7 +78,7 @@ class Boat:
                 self.hdir = 1
             elif self.loc[1] > self.river_size[1] - 2:
                 self.hdir = -1
-            if self.vmove and self.h_time == 20:
+            if self.vmove and h_time == 20:
                 self.vmove = self.vmove * -1
         if self.loc[0] > self.river_size[0] - 2:
             self.vdir = -1
@@ -84,21 +86,23 @@ class Boat:
                 self.hdir = 1
             elif self.loc[1] > self.river_size[1] - 2:
                 self.hdir = -1
-            if self.vmove and self.h_time == 20:
+            if self.vmove and h_time == 20:
                 self.vmove = self.vmove * -1
         if self.vmove == -1:
             self.loc[1] += self.hdir * self.velocity
-            self.h_time -= 1
+            h_time -= 1
         else:
             self.loc[0] += self.vdir * self.velocity
         if self.h_time == 0:
-            self.h_time = 20
+            h_time = 20
         return [min(round(self.loc[0]), self.river_size[0] - 3), min(round(self.loc[1]), self.river_size[1] -3)]
 
     def zip_sailing(self, right=True, down=True):
         """
         Assume the boat sail 45 degree from the horizontal line, and turn 90 degree when the boat is less than 2m
-        start from going right and down ward
+        start from going right and down ward.
+        :param right: start the zip sailing from right direction, if not start from going left.
+        :param down:  start the zip sailing from down direction. Cannot change to False if start from top of the river.
         :return: the location in next timestamp
         """
         move = np.sqrt(self.velocity**2/2)
@@ -125,6 +129,11 @@ class Boat:
         return right, down, self.loc
 
     def zigzag_sailing(self):
+        """
+        Assume the boat sail twice the speed in horizontal direction than vertical direction. The boat sails in a
+        zigzag way.
+        :return: the location in next timestamp
+        """
         if self.loc[0] < 2:
             self.vdir = 0.5
         if self.loc[0] > self.river_size[0] - 2:
@@ -143,6 +152,8 @@ class Boat:
         [ 0, 1, 2
           3, X, 4
           5, 6, 7 ]
+        Each number represent a direction. The direction is randomly choice with a weight list that can be obtain by
+        get_random_weight function.
         :return: the location in next timestamp
         """
         # print(self.loc)
@@ -197,58 +208,59 @@ class Boat:
 
     def get_random_weight(self, river):
         """
-
+        update the weight of each random sailing direction. The Weight is calculate by counting the percentage of the
+        pixels that are under the visible concentration.
         :param river: the current river concentration
         :return: a list of weight for each direction from [0-7] in random_sailing
         """
         x = self.loc[1] - 1
         y = self.loc[0] - 1
         try:
-            self.weight_list.append(river[:y,:x][river[:y,:x] < self.visible_concentration].size/river[:y,:x].size)
+            self.weight_list.append(river[:y,:x][river[:y,:x] < self.dye.visible_concentration].size/river[:y,:x].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         try:
-            self.weight_list.append(river[:y,x][river[:y,x] < self.visible_concentration].size/river[:y,x].size)
+            self.weight_list.append(river[:y,x][river[:y,x] < self.dye.visible_concentration].size/river[:y,x].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         try:
-            self.weight_list.append(river[:y,x+1:][river[:y,x+1:] < self.visible_concentration].size/river[:y,x+1:].size)
+            self.weight_list.append(river[:y,x+1:][river[:y,x+1:] < self.dye.visible_concentration].size/river[:y,x+1:].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         try:
-            self.weight_list.append(river[y,:x][river[y,:x] < self.visible_concentration].size/river[y,:x].size)
+            self.weight_list.append(river[y,:x][river[y,:x] < self.dye.visible_concentration].size/river[y,:x].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         self.weight_list.append(99)
         try:
-            self.weight_list.append(river[y,x+1:][river[y,x+1:] < self.visible_concentration].size/river[y,x+1:].size)
+            self.weight_list.append(river[y,x+1:][river[y,x+1:] < self.dye.visible_concentration].size/river[y,x+1:].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         try:
-            self.weight_list.append(river[y+1:,:x][river[y+1:,:x] < self.visible_concentration].size/river[y+1:,:x].size)
+            self.weight_list.append(river[y+1:,:x][river[y+1:,:x] < self.dye.visible_concentration].size/river[y+1:,:x].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         try:
-            self.weight_list.append(river[y+1:,x][river[y+1:,x] < self.visible_concentration].size/river[y+1:,x].size)
+            self.weight_list.append(river[y+1:,x][river[y+1:,x] < self.dye.visible_concentration].size/river[y+1:,x].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         try:
-            self.weight_list.append(river[y+1:,x+1:][river[y+1:,x+1:] < self.visible_concentration].size/river[y+1:,x+1:].size)
+            self.weight_list.append(river[y+1:,x+1:][river[y+1:,x+1:] < self.dye.visible_concentration].size/river[y+1:,x+1:].size)
         except ZeroDivisionError:
             self.weight_list.append(0)
         # percentage = s_river.r_plot[s_river.r_plot < self.visible_concentration].size / s_river.r_plot.size
-        # print(self.weight_list)
+        # print(self.loc, self.weight_list[9:])
         self.weight_list = self.weight_list[9:]
 
 
 class Dye:
-    def __init__(self, visible_concentration):
+    def __init__(self, min_dye):
         """
-        :param visible_concentration:
+        :param min_dye: minimum dye need to dye the whole river
         dye information:
         https://www.irishcentral.com/culture/craic/st-patricks-day-chicago-river-green
         """
-        self.visible_concentration = visible_concentration
+        self.visible_concentration = min_dye * 0.8 * 453.59237 / (85*550*1 * 100**3) * 1000
 
     def to_concerntration(self,dye_g):
         """
@@ -328,8 +340,8 @@ def simulate():
         # usual length 550 2022 60th 1280
         s_river = River(545, 70, 1, 1)
         # print(s_river.r, s_river.r.shape)
-        b_boat = Boat([545, 70], 33.75, 2 ** (1 / 2), 1.89, 0.8 * 2.426 * 10 ** -4)
-        s_boat = Boat([545, 70], 11.25, 2 * 2 ** (1 / 2), 1.89, 0.8 * 2.426 * 10 ** -4)
+        b_boat = Boat([545, 70], 33.75, 2 ** (1 / 2), 1.89, 25)
+        s_boat = Boat([545, 70], 11.25, 2 * 2 ** (1 / 2), 1.89, 25)
         go = True
         i = 0
         time_95 = 0
@@ -346,7 +358,7 @@ def simulate():
                 s_river.r[loc2[0], loc2[1]] += s_boat.spread_dye()
                 right, down, loc = b_boat.zip_sailing(right, down)
                 # print(i, s_boat.dye_weight, b_boat.dye_weight)
-            s_river.dissolve()
+            s_river.diffusion()
             s_river.flow_effect()
             if i % 100 == 0 and s == 0:
                 # print(i, dye, loc)
