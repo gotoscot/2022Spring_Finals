@@ -289,6 +289,9 @@ class Dye:
         :param min_dye: minimum dye need to dye the whole river
         dye information:
         https://www.irishcentral.com/culture/craic/st-patricks-day-chicago-river-green
+        >>> d = Dye(30)
+        >>> d.visible_concentration
+        0.00023286025411764705
         """
         self.visible_concentration = min_dye * 0.8 * 453.59237 / (85*550*1 * 100**3) * 1000
 
@@ -298,6 +301,9 @@ class Dye:
         Percent weight-volume (%(w/v)) = 100 x (g of solute / ml of solution)
         :param dye_g: the weight of dye in gram.
         :return: the concentration in g / m^3
+        >>> e = Dye(35)
+        >>> e.to_concerntration(40)
+        0.04
         """
         return dye_g / 100 ** 3 * 1000
 
@@ -314,6 +320,7 @@ class River:
         # self.r = np.zeros((l,w,d))
         # "+2" is used for setting boundary value same as the boundary
         self.r = np.zeros((length+2, w+2)).astype('float64')
+        self.reserve = self.r
         # the area to plot the river
         self.r_plot = self.r[1:-1, 1:-1]
 
@@ -357,14 +364,13 @@ class River:
         c_minus_1 = np.vstack((self.reserve[0, :], c_minus_1))
         self.r += np.multiply((c_minus_1 - c_and_1) / 2, flow_rand_x)
         self.r_plot = self.r[1:-1, 1:-1]
-        # self.r = scipy.ndimage.interpolation.shift(self.r, [self.flow_rate, 0], cval=0.0)
 
 
 def simulate():
     total_time = 0
     fail_count = 0
     total_percentage = 0
-    for s in range(10):
+    for s in range(100):
         # usual length 550 2022 60th 1280
         s_river = River(545, 70, 1, 1)
         # print(s_river.r, s_river.r.shape)
@@ -410,7 +416,7 @@ def simulate():
                 print(f'Fail the {s+1}th simulation.')
                 go = False
             # if (s_river.r_plot >= 0.8*2.426*10**-4).all() or i > 7200:
-    avg_time = round(total_time / (10 - fail_count), 0)
+    avg_time = round(total_time / (100 - fail_count), 0)
     print('The average time to dye the river is:', format_timespan(avg_time))
     if fail_count != 0:
         avg_percentage = 1 - round(total_percentage / fail_count, 2)
