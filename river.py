@@ -59,6 +59,14 @@ class Boat:
         Update the concentration added to the boat location and the remain dye weight
         :param boat_width: the weight of the boat width that can affect the dyeing range
         :return: return the concentration of the point that the boat spread dye
+        >>> b = Boat([10,5])
+        >>> b.spread_dye()
+        0.00189
+        >>> b.dye_weight = 0.0001
+        >>> b.spread_dye()
+        1.0000000000000001e-07
+        >>> b.spread_dye()
+        0
         """
         if self.dye_weight > 0:
             if self.dye_weight > self.dye_spread_v * boat_width:
