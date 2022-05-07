@@ -125,6 +125,13 @@ class Boat:
         :param right: start the zip sailing from right direction, if not start from going left.
         :param down:  start the zip sailing from down direction. Cannot change to False if start from top of the river.
         :return: the location in next timestamp
+        >>> b = Boat([10,5])
+        >>> b.zip_sailing()
+        (False, True, [2, 3])
+        >>> b.loc = [10,2]
+        >>> b.zip_sailing()
+        (False, True, [4, 5])
+
         """
         move = np.sqrt(self.velocity**2/2)
         if right:
@@ -154,6 +161,7 @@ class Boat:
         Assume the boat sail twice the speed in horizontal direction than vertical direction. The boat sails in a
         zigzag way.
         :return: the location in next timestamp
+        >>>
         """
         if self.loc[0] < 2:
             self.vdir = 0.5
