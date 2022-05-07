@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import random
 from humanfriendly import format_timespan
+import simulation
 
 # The Boat will spread dye powder to the river
 # Possible features can be added: the diffusion speed affected by the boat (unit distance around)
@@ -302,20 +303,18 @@ class Dye:
 
 
 class River:
-    def __init__(self, length, w, d, flow_rate):
+    def __init__(self, length, w):
         """
         Here we just assume that the river is a large rectangular tank.
         :param length: length of the river
         :param w: width of the river
-        :param d: depth of the river
         """
         self.length = length
         self.w = w
-        # self.d = d
         # self.r = np.zeros((l,w,d))
-        self.r = np.zeros((length+2, w+2)).astype('float64')
         # "+2" is used for setting boundary value same as the boundary
-        self.flow_rate = flow_rate
+        self.r = np.zeros((length+2, w+2)).astype('float64')
+        # the area to plot the river
         self.r_plot = self.r[1:-1, 1:-1]
 
     def diffusion(self):
@@ -421,4 +420,5 @@ def simulate():
 
 
 if __name__ == '__main__':
-    simulate()
+    exec(simulation.simulation(123))
+    # simulate()
