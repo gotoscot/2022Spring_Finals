@@ -314,12 +314,22 @@ class River:
         Here we just assume that the river is a large rectangular tank.
         :param length: length of the river
         :param w: width of the river
+        >>> test_r = River(50, 183)
+        >>> test_r.r.shape
+        (52, 185)
+        >>> (test_r.r == test_r.reserve).all()
+        True
+        >>> test_r.length
+        50
+        >>> test_r.w
+        183
         """
         self.length = length
         self.w = w
         # self.r = np.zeros((l,w,d))
         # "+2" is used for setting boundary value same as the boundary
         self.r = np.zeros((length+2, w+2)).astype('float64')
+        # keep the concentration before diffusion so flow effect can use the same concentration matrix with diffusion
         self.reserve = self.r
         # the area to plot the river
         self.r_plot = self.r[1:-1, 1:-1]
@@ -369,8 +379,21 @@ class River:
 
     def flow_effect(self):
         """
-
+        update the dye concentration cause by the flow of Chicago river
         :return: the shifted matrix
+        >>> np.random.seed(54321)
+        >>> test_f = River(5,3)
+        >>> test_f.r = np.array([10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype='float').reshape((7, 5))
+        >>> test_f.reserve = test_f.r
+        >>> test_f.flow_effect()
+        >>> test_f.flow_effect()
+        >>> test_f.r_plot
+        array([[ 9.99612296e+00,  9.96878294e+00,  9.81006097e+00],
+               [-2.43269299e-02,  7.45062075e-02,  6.63141808e-02],
+               [ 5.64405031e-05, -7.83509246e-04,  2.02539976e-04],
+               [ 0.00000000e+00,  0.00000000e+00,  0.00000000e+00],
+               [ 0.00000000e+00,  0.00000000e+00,  0.00000000e+00]])
         """
         # C^(n+1)_i,j=(C^n_i-1,j-C^n_i+1,j)/2dx*dt*u^n_i,j
         # u: water velocity
