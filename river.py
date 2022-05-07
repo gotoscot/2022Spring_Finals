@@ -86,6 +86,12 @@ class Boat:
         In case the boat meet the right bank, it will turn to the left bank.
         :param h_time: horizontal movement time when a straight sailing boat meet the end of the river
         :return: the location in next timestamp
+        >>> b = Boat([10,5])
+        >>> b.straight_sailing()
+        [3, 2]
+        >>> b.loc = [10,2]
+        >>> b.straight_sailing()
+        [7, 2]
         """
         if self.loc[0] < 2:
             self.vdir = 1
@@ -108,7 +114,7 @@ class Boat:
             h_time -= 1
         else:
             self.loc[0] += self.vdir * self.velocity
-        if self.h_time == 0:
+        if h_time == 0:
             h_time = 20
         return [min(round(self.loc[0]), self.river_size[0] - 3), min(round(self.loc[1]), self.river_size[1] -3)]
 
