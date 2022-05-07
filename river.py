@@ -327,8 +327,26 @@ class River:
 
     def diffusion(self):
         """
-
+        update the river dye concentration with the derivative function
         :return:
+        >>> np.random.seed(888)
+        >>> test_river = River(5,3)
+        >>> test_river.r = np.ones((7,5))
+        >>> test_river.r
+        array([[1., 1., 1., 1., 1.],
+               [1., 1., 1., 1., 1.],
+               [1., 1., 1., 1., 1.],
+               [1., 1., 1., 1., 1.],
+               [1., 1., 1., 1., 1.],
+               [1., 1., 1., 1., 1.],
+               [1., 1., 1., 1., 1.]])
+        >>> test_river.diffusion()
+        >>> test_river.r_plot
+        array([[1.00506888, 0.98859675, 1.00351616],
+               [0.99488618, 0.99968455, 0.9859414 ],
+               [0.9854907 , 1.01066283, 1.01535338],
+               [0.9976479 , 0.98934167, 0.99737528],
+               [0.99315146, 1.0047441 , 0.99898046]])
         """
         # set normal distribution random variable with mean=3, sd=1 and rescale the mean to 1
         # water diffusion coefficient reference: https://dtrx.de/od/diff/index.html#tab7 used 8 degree celsius
