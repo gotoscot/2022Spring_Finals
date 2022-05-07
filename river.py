@@ -17,15 +17,22 @@ the river concentration for 1 second.
 The simulation function setup the environment to run the Monte Carlo simulation. 
 """
 
-
 class Boat:
-    def __init__(self, river_size, dye_weight, velocity, dye_spread_v, min_dye):
+    def __init__(self, river_size, dye_weight=45, velocity=2, dye_spread_v=1.89, min_dye=25):
         """
+        This is the constructor of the boat class, which initialize a boat object when created. The given river size is
+        used for sailing.
         :param river_size: The size of the river
         :param dye_weight: the weight of dye powder the boat is carrying in pounds
         :param velocity: the velocity of the boat in m/s
         :param dye_spread_v: the weight of dye can be spread in g/s
         :param min_dye: minimum dye need to dye the whole river in pounds
+        >>> b = Boat([10,5])
+        >>> print('River size: {}, Dye_weight: {}, Velocity: {}, dye_spread_v: {}'.format(b.river_size,b.dye_weight,b.velocity,b.dye_spread_v))
+        River size: [10, 5], Dye_weight: 20411.65665, Velocity: 2, dye_spread_v: 1.89
+        >>> b = Boat([10,5], 30,3,1.55,25)
+        >>> print('River size: {}, Dye_weight: {}, Velocity: {}, dye_spread_v: {}'.format(b.river_size,b.dye_weight,b.velocity,b.dye_spread_v))
+        River size: [10, 5], Dye_weight: 13607.7711, Velocity: 3, dye_spread_v: 1.55
         """
         self.river_size = river_size
         # initial boat location is on the top middle of the given river
