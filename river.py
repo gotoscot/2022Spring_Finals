@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import random
 from humanfriendly import format_timespan
-import simulation
+# import simulation
 
 # The Boat will spread dye powder to the river
 # Possible features can be added: the diffusion speed affected by the boat (unit distance around)
@@ -185,6 +185,7 @@ class Boat:
         Each number represent a direction. The direction is randomly choice with a weight list that can be obtain by
         get_random_weight function.
         :return: the location in next timestamp
+
         """
         # print(self.loc)
         direction_array = np.array([0, 1, 2, 3, 99, 4, 5, 6, 7], dtype=int).reshape(3, 3)
@@ -407,13 +408,13 @@ class River:
         self.r_plot = self.r[1:-1, 1:-1]
 
 
-def simulate():
+def simulate(b_boat_movement='Straight', s_boat_movement='Random'):
     total_time = 0
     fail_count = 0
     total_percentage = 0
     for s in range(100):
         # usual length 550 2022 60th 1280
-        s_river = River(545, 70, 1, 1)
+        s_river = River(545, 70)
         # print(s_river.r, s_river.r.shape)
         b_boat = Boat([545, 70], 33.75, 2 ** (1 / 2), 1.89, 25)
         s_boat = Boat([545, 70], 11.25, 2 * 2 ** (1 / 2), 1.89, 25)
@@ -425,13 +426,28 @@ def simulate():
         loc2 = None
         while go:
             if s_boat.dye_weight != 0:
-                s_boat.get_random_weight(s_river.r_plot)
+                if s_boat_movement == 'Random':
+                    s_boat.get_random_weight(s_river.r_plot)
+                    loc2 = s_boat.random_sailing()
+                elif s_boat_movement =='Straight':
+                    loc2 = s_boat.straight_sailing()
+                elif s_boat_movement =='Zigzag':
+                    loc2 = s_boat.zigzag_sailing()
+
+
                 # loc = b_boat.zigzag_sailing()
                 # loc = b_boat.straight_sailing()
-                loc2 = s_boat.random_sailing()
+
                 s_river.r[loc[0], loc[1]-1:loc[1]+2] += b_boat.spread_dye(3)
                 s_river.r[loc2[0], loc2[1]] += s_boat.spread_dye()
                 right, down, loc = b_boat.zip_sailing(right, down)
+                if b_boat_movement == 'Random':
+                    b_boat.get_random_weight(s_river.r_plot)
+                    loc = b_boat.random_sailing()
+                elif b_boat_movement =='Straight':
+                    loc = b_boat.straight_sailing()
+                elif b_boat_movement =='Zigzag':
+                    right, down, loc = b_boat.zip_sailing(right, down)
                 # print(i, s_boat.dye_weight, b_boat.dye_weight)
             s_river.diffusion()
             s_river.flow_effect()
@@ -467,5 +483,6 @@ def simulate():
 
 
 if __name__ == '__main__':
-    exec(simulation.simulation(123))
-    # simulate()
+    #exec(simulation.simulation(123))
+    # Optional boat movements are "Staright" , "Random", "Zigzag"
+    simulate()
