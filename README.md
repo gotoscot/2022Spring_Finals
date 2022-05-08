@@ -87,16 +87,6 @@ In this project, our group simulates how long it takes for the Chicago River to 
 	- Improve simulation speed: 15 mins for 100 simulation 
 	- Add to 3D model
 	- Custom boat movement style
-## Reference
-- Andrew, S. (2022, March 17). Why Chicago Dyes Its River Green for st. patrick's day. CNN. Retrieved May 7, 2022, from
-    https://www.cnn.com/2022/03/17/us/chicago-river-dyed-green-st-patricks-day-explained-cec/index.html
-- Dolgopolova E. Turbulent Diffusion and Eddy Scales in Rivers. Water Resources. 46:S11-S19. doi:10.1134/S0097807819070042
-- García, Marcelo. (2008). Sediment Transport and Morphodynamics. 10.1061/9780784408148.ch02
-- Measuring Gravity Currents in the Chicago River, Chicago, Illinois - Scientific Figure on ResearchGate. Available from: https://www.researchgate.net/figure/Cross-section-of-Chicago-River-at-Columbus-Drive-Chicago-IL-Vertical-scale-exaggerated_fig2_4326253
-- St. Patrick's day chicago: Top ways to celebrate. Choose Chicago. (2022, March 8). Retrieved May 7, 2022, from 		https://www.choosechicago.com/articles/holidays/st-patricks-day-chicago/ 
-- USGS 05536123 CHICAGO RIVER AT COLUMBUS DRIVE AT CHICAGO, IL. USGS Water Resources. (n.d.). Retrieved from https://waterdata.usgs.gov/nwis/uv?cb_72254=on&amp;format=gif&amp;site_no=05536123&amp;period=&amp;begin_date=2022-03-01&amp;end_date=2022-03-31 
-- Wood, J. M. (2022, March 17). How do they dye the Chicago River Green for st. patrick's day? Mental Floss. Retrieved May 7, 2022, from 			https://www.mentalfloss.com/article/62220/what-do-they-use-dye-chicago-river-green-st-patricks-day
-
 ## Running simulation
 ### Standard simulation
 - Directly run the river.py code
@@ -110,3 +100,12 @@ In this project, our group simulates how long it takes for the Chicago River to 
   - The third parameter is the boat speed in meter
   - The forth parameter is the dye spreading speed in gram/second
   - The last parameter is the minimum dye that need to let the river green
+## Reference
+- Andrew, S. (2022, March 17). Why Chicago Dyes Its River Green for st. patrick's day. CNN. Retrieved May 7, 2022, from
+    https://www.cnn.com/2022/03/17/us/chicago-river-dyed-green-st-patricks-day-explained-cec/index.html
+- Dolgopolova E. Turbulent Diffusion and Eddy Scales in Rivers. Water Resources. 46:S11-S19. doi:10.1134/S0097807819070042
+- García, Marcelo. (2008). Sediment Transport and Morphodynamics. 10.1061/9780784408148.ch02
+- Measuring Gravity Currents in the Chicago River, Chicago, Illinois - Scientific Figure on ResearchGate. Available from: https://www.researchgate.net/figure/Cross-section-of-Chicago-River-at-Columbus-Drive-Chicago-IL-Vertical-scale-exaggerated_fig2_4326253
+- St. Patrick's day chicago: Top ways to celebrate. Choose Chicago. (2022, March 8). Retrieved May 7, 2022, from 		https://www.choosechicago.com/articles/holidays/st-patricks-day-chicago/ 
+- USGS 05536123 CHICAGO RIVER AT COLUMBUS DRIVE AT CHICAGO, IL. USGS Water Resources. (n.d.). Retrieved from https://waterdata.usgs.gov/nwis/uv?cb_72254=on&amp;format=gif&amp;site_no=05536123&amp;period=&amp;begin_date=2022-03-01&amp;end_date=2022-03-31 
+- Wood, J. M. (2022, March 17). How do they dye the Chicago River Green for st. patrick's day? Mental Floss. Retrieved May 7, 2022, from 			https://www.mentalfloss.com/article/62220/what-do-they-use-dye-chicago-river-green-st-patricks-day
