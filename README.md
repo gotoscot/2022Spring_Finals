@@ -5,8 +5,8 @@ Jiren Mao, ShengWen Wang, Zicheng Li
 ## Background
 In this project, our group simulates how long it takes for the Chicago River to dye green on St Patrick’s Day. St Patrick’s day is designed to memorialize Saint Patrick and celebrate the culture of the Irish. Chicago started to celebrate St Patrick’s Day by dyeing the river because of city workers’ misoperation. Since that dyeing, the Chicago River has become a traditional activity on St Patrick's Day. Therefore, we want to know whether **boat speed, dyeing spreading strategy, and boat movement** would influence the dyeing time
 ## Hypothesis
-* Increased boat speed will speed up the dyeing time
-* Dyeing spreading strategy will reduce dyeing time
+* Increased boat speed will speed up the dyeing speed
+* Spread the dye faster will reduce dyeing time
 * Straight-lin sailing will slow down the dyeing time
 ## Assumptions of River
 ![Assumptions](https://user-images.githubusercontent.com/63265733/166622358-bd209fdc-1e7b-4611-a752-bd4c0ce5f4cd.jpeg)
@@ -57,18 +57,22 @@ In this project, our group simulates how long it takes for the Chicago River to 
 * The average time to dye the river is: **57 minutes and 52 seconds**
 ## Conclusion
 ![Example for testing Hypothesis](https://user-images.githubusercontent.com/63265733/167280678-230f0066-83a9-4bd4-aaf7-c4cd93333182.jpg)
-* Different faster boat speed would dye the river faste
-	- Boats speeds B: 2 m/s; S: 4 m/s
-	- The average time to dye the river is: **41 minutes and 49 seconds** in red
-* Different spreading strategy
-	- Increase dye spreading B: 7.5 g/s; S: 2.5 g/s
-	- The average time to dye the river is: **1 hour, 31 minutes and 24 seconds**
-	- Decrease spreading B: 4.5 g/s; Increase spreading S: 2.1 g/s
-	- The average time to dye the river is: **1 hour, 34 minutes and 30 seconds**
-	- There are 9 simulations fail to cover the river with an average 94.00% coverage rate.
-* Different boats movement
-	- Change the big boat movement to straight sailing
-	- The average time to dye the river is: **42 minutes and 36 seconds**
+* Increased boat speed will speed up the dyeing speed
+    - Boats speeds B: 2 m/s; S: 4 m/s
+    - The average time to dye the river is: **41 minutes and 49 seconds** in red
+    - Faster boat speed will increase the dyeing speed
+* Spread the dye faster will reduce dyeing time
+    - Increase dye spreading B: 7.5 g/s; S: 2.5 g/s
+    - The average time to dye the river is: **1 hour, 31 minutes and 24 seconds**
+    - Decrease spreading B: 4.5 g/s; Increase spreading S: 2.1 g/s
+    - The average time to dye the river is: **1 hour, 34 minutes and 30 seconds**
+    - There are 9 simulations fail to cover the river with an average 94.00% coverage rate.
+    - Increasing dye spreading speed on the small boat will slower the dyeing speed
+    - The change in dye spreading speed of big boat has less influence. Need more simulation to find a trend. 
+* Straight-lin sailing will slow down the dyeing time
+    - Change the big boat movement to straight sailing
+    - The average time to dye the river is: **42 minutes and 36 seconds**
+    - The straight sailing will in fact increase the dyeing speed
 ## Limitation and Future work
 * Limitation
 	- Ignore turbulence cause by the boat movement
