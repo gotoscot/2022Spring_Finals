@@ -472,9 +472,9 @@ def simulate(b_boat_movement='Straight', s_boat_movement='Random'):
                 if b_boat_movement == 'Random':
                     b_boat.get_random_weight(s_river.r_plot)
                     loc = b_boat.random_sailing()
-                elif b_boat_movement =='Straight':
+                elif b_boat_movement == 'Straight':
                     loc = b_boat.straight_sailing()
-                elif b_boat_movement =='Zigzag':
+                elif b_boat_movement == 'Zigzag':
                     right, down, loc = b_boat.zip_sailing(right, down)
                 # print(i, s_boat.dye_weight, b_boat.dye_weight)
             s_river.diffusion()
@@ -511,6 +511,5 @@ def simulate(b_boat_movement='Straight', s_boat_movement='Random'):
 
 
 if __name__ == '__main__':
-    #exec(simulation.simulation(123))
-    # Optional boat movements are "Staright" , "Random", "Zigzag"
+    # Optional boat movements are "Straight" , "Random", "Zigzag"
     simulate()
