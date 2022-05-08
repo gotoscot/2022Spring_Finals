@@ -56,7 +56,7 @@ In this project, our group simulates how long it takes for the Chicago River to 
 * Simulate 100 times
 * The average time to dye the river is: **57 minutes and 52 seconds**
 ## Conclusion
-![Example for testing Hypothesis](https://user-images.githubusercontent.com/63265733/167280678-230f0066-83a9-4bd4-aaf7-c4cd93333182.jpg)
+![Examples for testing hypothesis](https://user-images.githubusercontent.com/63265733/167282010-12619d10-f7b6-4d58-9d7a-25b4f01a3233.jpg)
 * Different faster boat speed would dye the river faste
 	- Boats speeds B: 2 m/s; S: 4 m/s
 	- The average time to dye the river is: **41 minutes and 49 seconds** in red
