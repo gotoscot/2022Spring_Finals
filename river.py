@@ -91,8 +91,12 @@ class Boat:
         >>> b.straight_sailing()
         [3, 2]
         >>> b.loc = [10,2]
-        >>> b.straight_sailing()
+        >>> b.loc = b.straight_sailing()
+        >>> b.loc
         [7, 2]
+        >>> b.loc = [0,1]
+        >>> b.straight_sailing()
+        [2, 1]
         """
         if self.loc[0] < 2:
             self.vdir = 1
@@ -162,7 +166,11 @@ class Boat:
         Assume the boat sail twice the speed in horizontal direction than vertical direction. The boat sails in a
         zigzag way.
         :return: the location in next timestamp
-        >>>
+        >>> b = Boat([10,5])
+        >>> b.zigzag_sailing()
+        [2, 2]
+        >>> b.zigzag_sailing()
+        [3, 2]
         """
         if self.loc[0] < 2:
             self.vdir = 0.5
@@ -185,7 +193,21 @@ class Boat:
         Each number represent a direction. The direction is randomly choice with a weight list that can be obtain by
         get_random_weight function.
         :return: the location in next timestamp
-
+        >>> random.seed(666)
+        >>> test_b = Boat([7, 6])
+        >>> test_b.loc = [1, 3]
+        >>> test_b.random_sailing()
+        [3, 3]
+        >>> random.seed(600)
+        >>> test_b.random_sailing()
+        [4, 4]
+        >>> random.seed(500)
+        >>> test_b.random_sailing()
+        [6, 4]
+        >>> test_b.loc = [7, 6]
+        >>> test_b.raw_loc = [7, 6]
+        >>> test_b.random_sailing()
+        [7, 4]
         """
         # print(self.loc)
         direction_array = np.array([0, 1, 2, 3, 99, 4, 5, 6, 7], dtype=int).reshape(3, 3)
@@ -243,6 +265,12 @@ class Boat:
         pixels that are under the visible concentration.
         :param river: the current river concentration
         :return: a list of weight for each direction from [0-7] in random_sailing
+        >>> river = np.array([1, 1, 0, 1, 0, 0, 0, 0, 1]).reshape((3, 3))
+        >>> test_b = Boat([7, 6])
+        >>> test_b.loc = [2, 2]
+        >>> test_b.get_random_weight(river)
+        >>> test_b.weight_list
+        [0.0, 0.0, 1.0, 0.0, 99, 1.0, 1.0, 1.0, 0.0]
         """
         x = self.loc[1] - 1
         y = self.loc[0] - 1
