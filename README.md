@@ -57,9 +57,9 @@ In this project, our group simulates how long it takes for the Chicago River to 
 * The average time to dye the river is: **57 minutes and 52 seconds**
 ## Demo
 ### Start of Simuulation
-![Start of Simulation](https://user-images.githubusercontent.com/63265733/167282722-8079ce4d-34b3-4cf9-b4ca-46bb669ae803.jpeg)
+![Start of Simulation](https://user-images.githubusercontent.com/63265733/167282829-46022b2e-fbd5-497f-8dc1-266197708504.jpeg)
 ### End of Simulation
-![Start of Simulation](https://user-images.githubusercontent.com/63265733/167282731-cfdc7d1e-41e7-40ec-9015-fdf96407128a.jpeg)
+![End of Simulation](https://user-images.githubusercontent.com/63265733/167282827-43f2d78b-fba3-4c23-a9f7-07b9f8ea0964.jpeg)
 ## Conclusion
 ![Examples for testing hypothesis](https://user-images.githubusercontent.com/63265733/167282527-72584cc2-8233-4013-8cf6-d1c26234a852.jpg)
 * Increased boat speed will speed up the dyeing speed
